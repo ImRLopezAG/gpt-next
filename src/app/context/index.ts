@@ -16,6 +16,7 @@ interface Action {
   addMessage: (message: Messages) => void
   clearMessages: () => void
   setLoading: (loading: boolean) => void
+  getLastBotMessage: () => Messages | undefined
 }
 export const useMessageStore = create(
   persist<State & Action>(
@@ -36,6 +37,10 @@ export const useMessageStore = create(
         set((state) => ({
           loading
         }))
+      },
+      getLastBotMessage: () => {
+        const { messages } = get()
+        return messages.filter((message) => message.isBot).pop()
       }
     }),
     {
