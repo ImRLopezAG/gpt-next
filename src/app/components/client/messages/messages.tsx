@@ -3,7 +3,7 @@ import { useMessage } from '@app/hooks'
 import { OpenAIIcon } from '@components/icons'
 import { useLayoutEffect } from 'react'
 import { HotQuestions } from '@components/client/chat'
-import { Message } from '.'
+import { Message, Toast } from '.'
 
 function Messages (): JSX.Element {
   const { loading, messages, messagesEndRef } = useMessage()
@@ -14,6 +14,7 @@ function Messages (): JSX.Element {
   }, [messages])
   return (
     <div className='flex flex-col w-full max-w-7xl px-4 overflow-y-auto h-[800px] overflow-auto rounded-sm'>
+      <Toast />
       {typeof window !== 'undefined' &&
       messages !== undefined &&
       messages.length > 0
