@@ -3,6 +3,7 @@ import { useMessage } from '@app/hooks'
 import { OpenAIIcon } from '@components/icons'
 import { useLayoutEffect } from 'react'
 import { HotQuestions } from '@components/client/chat'
+import { Box } from '@components/ui'
 import { Message, Toast } from '.'
 
 function Messages (): JSX.Element {
@@ -33,15 +34,9 @@ function Messages (): JSX.Element {
             >
               {isBot ? '🤖' : '👤'}
             </span>
-            <div
-              className={`px-3 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-2xl pl-6 pr-16 py-2 text-pretty ${
-                isBot ? 'bg-zinc-800' : 'bg-zinc-700'
-              } border border-zinc-700 text-white text-lg resize-none overflow-hidden text-pretty${
-                isBot ? 'rounded-br-none' : 'rounded-bl-none'
-              }`}
-            >
+            <Box $isBot={isBot}>
               <Message message={message} isBot={isBot} />
-            </div>
+            </Box>
             <div ref={messagesEndRef} />
           </div>
             ))
