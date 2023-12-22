@@ -3,7 +3,7 @@ import { useMessage } from '@app/hooks'
 import { OpenAIIcon } from '@components/icons'
 import { useLayoutEffect } from 'react'
 import { HotQuestions } from '@components/client/chat'
-import { Box } from '@components/ui'
+import { Box, Container, Picture } from '@components/ui'
 import { Message, Toast } from '.'
 
 function Messages (): JSX.Element {
@@ -21,24 +21,15 @@ function Messages (): JSX.Element {
       messages.length > 0
         ? (
             messages.map(({ id, message, isBot }) => (
-          <div
-            key={id}
-            className={`flex flex-row items-baseline px-4 mb-3  ${
-              isBot ? 'justify-start' : 'justify-end'
-            }`}
-          >
-            <span
-              className={`inline-block text-center size-7 mr-2 rounded-full flex-shrink-0 ${
-                isBot ? 'bg-green-500' : 'bg-blue-500'
-              }`}
-            >
-              {isBot ? '🤖' : '👤'}
-            </span>
-            <Box $isBot={isBot}>
-              <Message message={message} isBot={isBot} />
-            </Box>
-            <div ref={messagesEndRef} />
-          </div>
+              <Container key={id} $isBot={isBot}>
+                <Picture $isBot={isBot}>
+                  {isBot ? '🤖' : '👤'}
+                </Picture>
+                <Box $isBot={isBot}>
+                  <Message message={message} isBot={isBot} />
+                </Box>
+                <div ref={messagesEndRef} />
+              </Container>
             ))
           )
         : (
@@ -51,14 +42,9 @@ function Messages (): JSX.Element {
         </div>
           )}
       {loading && (
-        <div className='flex flex-row items-center justify-center'>
-          <div className='px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 rounded-full animate-pulse'>
-            Loading...
-            <span className='ml-2' role='img' aria-label='Loading'>
-              🔄
-            </span>
-          </div>
-        </div>
+        <Box $isBot>
+          <Message message='Thinking...' isBot />
+        </Box>
       )}
     </div>
   )

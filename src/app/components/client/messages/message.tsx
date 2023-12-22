@@ -5,10 +5,35 @@ import { useMessage } from '@app/hooks'
 interface MessageProps {
   message: string
   isBot: boolean
+  props?: any
 }
+
+type RenderCodeBlockProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 
 export function Message ({ message, isBot }: MessageProps): JSX.Element {
   const { markdownFormatToTextPlain, copyToClipboard } = useMessage()
+  const renderCodeBlock = ({ className, children, ...props }: RenderCodeBlockProps): JSX.Element => {
+    const language = /language-(\w+)/.exec(className ?? 'text-plain')
+    if (language !== null) {
+      return (
+        <CopyClipBoard
+          props={props}
+          lang={language[1] ?? 'javascript'}
+          children={children}
+        />
+      )
+    } else {
+      return (
+        <code style={{
+          backgroundColor: '#1a1a1a75',
+          padding: '0.1rem 0.5rem',
+          borderRadius: '0.5rem'
+        }} className={className} {...props}>
+          {children}
+        </code>
+      )
+    }
+  }
   return (
     <>
       {isBot
@@ -37,28 +62,9 @@ export function Message ({ message, isBot }: MessageProps): JSX.Element {
                 Copy
               </button>
               <ReactMarkdown
-              components={{
-                code ({ className, children, ...props }) {
-                  const language = /language-(\w+)/.exec(className ?? '')
-                  return language !== null
-                    ? (
-                    <CopyClipBoard
-                      props={props}
-                      lang={language[1]}
-                      children={children}
-                    />
-                      )
-                    : (
-                    <code style={{
-                      backgroundColor: '#1a1a1a75',
-                      padding: '0.1rem 0.5rem',
-                      borderRadius: '0.5rem'
-                    }} className={className} {...props}>
-                      {children}
-                    </code>
-                      )
-                }
-              }}
+                components={{
+                  code: renderCodeBlock
+                }}
             >
               {message}
             </ReactMarkdown>
