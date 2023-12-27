@@ -14,7 +14,13 @@ export async function generateResponse ({
 }: GenerateResponse): Promise<string> {
   const response = await model
     .generateContent(prompt)
-    .then(async ({ response }) => response.text())
+    .then(async ({ response }) => response)
+  return response.text()
+}
 
+export async function getNameFromResponse ({ prompt }: GenerateResponse): Promise<string> {
+  const response = await generateResponse({
+    prompt: `Generate a title for a this topic: it should as max 20 words. \n\n${prompt}`
+  })
   return response
 }
