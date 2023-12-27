@@ -25,7 +25,7 @@ function CopyableCodeBlock ({ children, lang, props }: MessageProps): JSX.Elemen
       language={lang}
       customStyle={{
         borderRadius: '0 0 0.5rem 0.5rem',
-        padding: '0.5rem',
+        padding: '1rem',
         overflow: 'auto',
         paddingRight: '0.1rem',
         paddingTop: '0.2rem',

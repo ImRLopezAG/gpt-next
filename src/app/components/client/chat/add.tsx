@@ -5,16 +5,17 @@ import { useChatStore } from '@app/context'
 
 function AddChat (): JSX.Element {
   const router = useRouter()
-  const { addChat } = useChatStore()
+  const { addChat, setCurrentChat } = useChatStore()
   const createChat = (): void => {
     const id = crypto.randomUUID()
+    setCurrentChat(id)
     addChat({
       id,
       messages: [],
       name: 'New chat',
       loading: false
     })
-    router.push(`/chat/${crypto.randomUUID()}`)
+    router.push(`/chat/${id}`)
   }
   return (
     <button

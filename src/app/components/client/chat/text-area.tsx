@@ -6,6 +6,8 @@ function TextArea (): JSX.Element {
     <textarea
       ref={textareaRef}
       value={prompt}
+      name='prompt'
+      id='prompt'
       onChange={({ target }) => {
         setPrompt(target.value)
       }}

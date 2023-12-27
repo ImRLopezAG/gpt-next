@@ -1,19 +1,16 @@
 import { generateResponse } from '@app/actions/ai.action'
 import { useChatStore } from '@app/context'
-import { usePathname } from 'next/navigation'
 
 interface HotButtonProps {
   prompt: string
 }
 
 function HotButton ({ prompt }: HotButtonProps): JSX.Element {
-  const pathname = usePathname()
-  const id = pathname.replace('/chat/', '')
-  const { addMessage, setLoading } = useChatStore()
+  const { addMessage, setLoading, current } = useChatStore()
   async function handleClick (): Promise<void> {
     setLoading(true)
     addMessage({
-      id,
+      id: current,
       message: {
         message: prompt,
         isBot: false,
@@ -22,7 +19,7 @@ function HotButton ({ prompt }: HotButtonProps): JSX.Element {
     })
     const response = await generateResponse({ prompt })
     addMessage({
-      id,
+      id: current,
       message: {
         message: response,
         isBot: true,

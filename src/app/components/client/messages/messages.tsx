@@ -1,18 +1,33 @@
 'use client'
-import { useMessage } from '@app/hooks'
+import { useMessage, useChats } from '@app/hooks'
 import { HotQuestions } from '@components/client/chat'
 import { OpenAIIcon } from '@components/icons'
 import { useLayoutEffect } from 'react'
 import { Toast } from '.'
 import { Message } from '@components/server'
+import { useParams } from 'next/navigation'
+import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+
+type MyParams = Params & { id: string }
 
 function Messages (): JSX.Element {
+  const { id }: MyParams = useParams()
+  const { chats, createChat } = useChats()
+
+  if (id === undefined && chats !== undefined) {
+    const chat = chats.find((chat) => chat.id === id)
+    if (chat === undefined) {
+      createChat()
+    }
+  }
   const { loading, messages, messagesEndRef } = useMessage()
+
   useLayoutEffect(() => {
     if (typeof window !== 'undefined' && messagesEndRef.current !== null) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [messages])
+
   return (
     <div className='flex flex-col mb-4 gap-1 px-4 overflow-y-auto scrollbar-hide'>
       <Toast />
@@ -21,10 +36,7 @@ function Messages (): JSX.Element {
       messages.length > 0
         ? (
             messages.map(({ id, message, isBot }) => (
-              <>
-                <Message key={id} message={message} isBot={isBot} />
-                <span ref={messagesEndRef} className='hidden' />
-              </>
+              <Message key={id} message={message} isBot={isBot} />
             ))
           )
         : (
@@ -39,6 +51,7 @@ function Messages (): JSX.Element {
       {loading && (
         <Message isBot message='Please wait while I process your request...' />
       )}
+      <span ref={messagesEndRef} className='hidden' />
     </div>
   )
 }
