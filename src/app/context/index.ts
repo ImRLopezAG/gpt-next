@@ -7,44 +7,124 @@ export interface Messages {
   isBot: boolean
 }
 
-interface State {
+export interface Chat {
+  id: string
   messages: Messages[]
+  name: string
+  loading: boolean
+}
+export type Edit = Pick<Chat, 'id' | 'name'>
+interface AddMessage {
+  id: string
+  message: Messages
+}
+
+interface State {
+  chats: Chat[]
   loading: boolean
 }
 
 interface Action {
-  addMessage: (message: Messages) => void
-  clearMessages: () => void
+  addChat: (chat: Chat) => void
+  clearChats: () => void
+  getChatMessages: (id: string) => Messages[] | undefined
+  addMessage: ({ id, message }: AddMessage) => void
   setLoading: (loading: boolean) => void
-  getLastBotMessage: () => Messages | undefined
+  getLastBotMessage: (id: string) => Messages | undefined
+  clearMessages: (id: string) => void
+  deleteChat: (id: string) => void
+  editChat: ({ id, name }: Edit) => void
+  getFirstMessage: (id: string) => Messages | undefined
 }
-export const useMessageStore = create(
+
+export const useChatStore = create(
   persist<State & Action>(
     (set, get) => ({
-      messages: [],
+      chats: [],
       loading: false,
-      addMessage: (message: Messages) => {
+      addChat: (chat: Chat) => {
         set((state) => ({
-          messages: [...state.messages, message]
+          chats: [...state.chats.filter((c) => c.messages.length > 0), chat]
         }))
       },
-      clearMessages: () => {
+      clearChats: () => {
         set((state) => ({
-          messages: []
+          chats: []
+        }))
+      },
+      getChatMessages: (id: string) => {
+        const { chats } = get()
+        return chats.find((chat) => chat.id === id)?.messages
+      },
+      addMessage: ({ id, message }) => {
+        set((state) => ({
+          chats: state.chats.map((chat) => {
+            if (chat.id === id) {
+              return {
+                ...chat,
+                messages: [...chat.messages, message]
+              }
+            }
+            return chat
+          })
         }))
       },
       setLoading: (loading: boolean) => {
         set((state) => ({
-          loading
+          chats: state.chats.map((chat) => {
+            return {
+              ...chat,
+              loading
+            }
+          })
         }))
       },
-      getLastBotMessage: () => {
-        const { messages } = get()
-        return messages.filter((message) => message.isBot).pop()
+      getLastBotMessage: (id: string) => {
+        const { chats } = get()
+        const messages = chats.find((chat) => chat.id === id)?.messages
+        return messages?.filter((message) => message.isBot).pop()
+      },
+      clearMessages: (id: string) => {
+        set((state) => ({
+          chats: state.chats.map((chat) => {
+            if (chat.id === id) {
+              return {
+                ...chat,
+                messages: []
+              }
+            }
+            return chat
+          })
+        }))
+      },
+      deleteChat: (id: string) => {
+        set((state) => ({
+          chats: [...state.chats].filter((chat) => chat.id !== id)
+        }))
+      },
+      editChat: ({ id, name }) => {
+        set((state) => ({
+          chats: [
+            ...state.chats.map((chat) => {
+              if (chat.id === id) {
+                return {
+                  ...chat,
+                  name
+                }
+              }
+              return chat
+            })
+          ]
+        }))
+      },
+      getFirstMessage: (id: string) => {
+        const { chats } = get()
+        const messages = chats.find((chat) => chat.id === id)?.messages
+        return messages?.shift()
       }
     }),
     {
-      name: 'messages'
+      name: 'chat'
     }
   )
 )
