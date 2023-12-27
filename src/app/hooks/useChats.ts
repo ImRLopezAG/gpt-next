@@ -2,17 +2,34 @@ import { useEffect, useState } from 'react'
 import { useChatStore } from '@app/context'
 import type { Edit, Chat } from '@app/context'
 import { getNameFromResponse } from '@app/actions'
-import { useMessage } from '.'
+import { useParams, useRouter } from 'next/navigation'
 
 interface ChatReturn {
   chats: Chat[] | undefined
   changeName: ({ id, name }: Edit) => Promise<void>
+  current: string
+  createChat: () => void
+  deleteChat: (id: string) => void
 }
 
 function useChats (): ChatReturn {
-  const { chats, getFirstMessage, editChat } = useChatStore()
+  const { id } = useParams()
+
+  const router = useRouter()
+  const { chats, getFirstMessage, editChat, setCurrentChat, addChat, deleteChat } =
+    useChatStore()
   const [chatsStorage, setChats] = useState<Chat[]>()
-  const { markdownFormatToTextPlain } = useMessage()
+
+  function markdownFormatToTextPlain (message: string): string {
+    return message
+      .replace(/(?:__|[*#])+/g, '')
+      .replace(/#+\s/g, '')
+      .replace(/(\*{1,2}|_{1,2})(.*?)\1/g, '$2')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)')
+      .replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '')
+      .replace(/`([^`]+)`/g, '$1')
+      .trim()
+  }
 
   async function changeName ({ id, name }: Edit): Promise<void> {
     const bot = getFirstMessage(id)
@@ -28,6 +45,18 @@ function useChats (): ChatReturn {
     }
   }
 
+  const createChat = (): void => {
+    const id = crypto.randomUUID()
+    setCurrentChat(id)
+    addChat({
+      id,
+      messages: [],
+      name: 'New chat',
+      loading: false
+    })
+    router.push(`/chat/${id}`)
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined' && chats !== undefined) {
       setChats(chats)
@@ -36,7 +65,10 @@ function useChats (): ChatReturn {
 
   return {
     chats: chatsStorage,
-    changeName
+    changeName,
+    current: typeof id !== 'string' ? '' : id,
+    createChat,
+    deleteChat
   }
 }
 

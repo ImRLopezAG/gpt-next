@@ -1,10 +1,14 @@
 import { useRef, useEffect, useState } from 'react'
-import { useChatStore, type Messages } from '@app/context'
+import { useChatStore, type MessageType } from '@app/context'
 import { toast } from 'react-hot-toast'
-import { usePathname } from 'next/navigation'
+import { useParams } from 'next/navigation'
+import { useChats } from '.'
+import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+
+type MyParams = Params & { id: string }
 
 interface MessageReturn {
-  messages: Messages[] | undefined
+  messages: MessageType[] | undefined
   loading: boolean
   messagesEndRef: React.MutableRefObject<HTMLDivElement | null>
   markdownFormatToTextPlain: (message: string) => string
@@ -12,12 +16,20 @@ interface MessageReturn {
 }
 
 export function useMessage (): MessageReturn {
-  const pathname = usePathname()
-  const id = pathname.replace('/chat/', '')
+  const { id }: MyParams = useParams()
+  const { chats, createChat } = useChats()
+
+  if (id === undefined && chats !== undefined && typeof id === 'string') {
+    const chat = chats.find((chat) => chat.id === id)
+    if (chat === undefined) {
+      createChat()
+    }
+  }
+
   const { getChatMessages, loading } = useChatStore()
   const messages = getChatMessages(id)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [messagesStorage, setMessages] = useState<Messages[]>()
+  const [messagesStorage, setMessages] = useState<MessageType[]>()
 
   const copyToClipboard = async (message: string): Promise<void> => {
     try {
@@ -28,6 +40,7 @@ export function useMessage (): MessageReturn {
       toast.error('Failed to copy')
     }
   }
+
   function markdownFormatToTextPlain (message: string): string {
     return message
       .replace(/(?:__|[*#])+/g, '')

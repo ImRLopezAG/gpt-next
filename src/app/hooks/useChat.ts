@@ -2,7 +2,6 @@ import { useChatStore } from '@app/context'
 import { generateResponse } from '@app/actions/ai.action'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useMessage } from '.'
-import { usePathname } from 'next/navigation'
 
 interface ChatReturn {
   handleMessage: () => Promise<void>
@@ -13,9 +12,7 @@ interface ChatReturn {
 }
 
 export function useChat (): ChatReturn {
-  const pathname = usePathname()
-  const id = pathname.replace('/chat/', '')
-  const { addMessage, setLoading, getLastBotMessage, clearMessages, loading } = useChatStore()
+  const { addMessage, setLoading, getLastBotMessage, clearMessages, loading, current: id } = useChatStore()
   const { markdownFormatToTextPlain, copyToClipboard } = useMessage()
   const [prompt, setPrompt] = useState<string>('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -43,6 +40,7 @@ export function useChat (): ChatReturn {
         })
         setPrompt('')
         const response = await generateResponse({ prompt })
+        console.log({ prompt, id, response })
         addMessage({
           id,
           message: {
