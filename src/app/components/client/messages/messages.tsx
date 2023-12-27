@@ -1,10 +1,10 @@
 'use client'
 import { useMessage } from '@app/hooks'
+import { HotQuestions } from '@components/client/chat'
 import { OpenAIIcon } from '@components/icons'
 import { useLayoutEffect } from 'react'
-import { HotQuestions } from '@components/client/chat'
-import { Box, Container, Picture } from '@components/ui'
-import { Message, Toast } from '.'
+import { Toast } from '.'
+import { Message } from '@components/server'
 
 function Messages (): JSX.Element {
   const { loading, messages, messagesEndRef } = useMessage()
@@ -14,37 +14,30 @@ function Messages (): JSX.Element {
     }
   }, [messages])
   return (
-    <div className='flex flex-col w-full max-w-7xl px-4 overflow-y-auto h-[800px] overflow-auto rounded-sm'>
+    <div className='flex flex-col mb-4 gap-1 px-4 overflow-y-auto scrollbar-hide'>
       <Toast />
       {typeof window !== 'undefined' &&
       messages !== undefined &&
       messages.length > 0
         ? (
             messages.map(({ id, message, isBot }) => (
-              <Container key={id} $isBot={isBot}>
-                <Picture $isBot={isBot}>
-                  {isBot ? '🤖' : '👤'}
-                </Picture>
-                <Box $isBot={isBot}>
-                  <Message message={message} isBot={isBot} />
-                </Box>
-                <div ref={messagesEndRef} />
-              </Container>
+              <>
+                <Message key={id} message={message} isBot={isBot} />
+                <span ref={messagesEndRef} className='hidden' />
+              </>
             ))
           )
         : (
-        <div className='flex flex-col items-center justify-center h-full gap-3'>
-          <OpenAIIcon />
-          <h1 className='text-3xl font-semibold mb-12'>
-            How can I help you today?
-          </h1>
-          <HotQuestions />
-        </div>
+            <div className='flex flex-col items-center justify-center h-full gap-3'>
+              <OpenAIIcon />
+              <h1 className='text-3xl font-semibold mb-12'>
+                How can I help you today?
+              </h1>
+              <HotQuestions />
+            </div>
           )}
       {loading && (
-        <Box $isBot>
-          <Message message='Thinking...' isBot />
-        </Box>
+        <Message isBot message='Please wait while I process your request...' />
       )}
     </div>
   )
