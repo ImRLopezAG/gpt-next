@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
-import { useMessageStore, type Messages } from '@app/context'
+import { useChatStore, type Messages } from '@app/context'
 import { toast } from 'react-hot-toast'
+import { usePathname } from 'next/navigation'
 
 interface MessageReturn {
   messages: Messages[] | undefined
@@ -11,7 +12,10 @@ interface MessageReturn {
 }
 
 export function useMessage (): MessageReturn {
-  const { messages, loading } = useMessageStore()
+  const pathname = usePathname()
+  const id = pathname.replace('/chat/', '')
+  const { getChatMessages, loading } = useChatStore()
+  const messages = getChatMessages(id)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [messagesStorage, setMessages] = useState<Messages[]>()
 
