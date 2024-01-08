@@ -23,7 +23,7 @@ export function MessageBot ({ message }: MessageProps): JSX.Element {
       return (
         <CopyClipBoard
           props={props}
-          lang={language[1] ?? 'javascript'}
+          lang={language[1] ?? 'text-plain'}
           children={children}
         />
       )

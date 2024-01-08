@@ -5,7 +5,7 @@ import { ChatCard } from '@components/server'
 function Chats (): JSX.Element {
   const { chats, changeName } = useChats()
   return (
-    <div className='flex flex-col space-y-1 scrollbar-hide overflow-y-auto max-h-[28em]'>
+    <div className='flex flex-col space-y-3 scrollbar-hide overflow-y-auto max-h-[28em]'>
       {typeof chats !== 'undefined' && (
         <>
           {chats.map(({ id, name }) => {

@@ -9,7 +9,8 @@ function Submit (): JSX.Element {
       onClick={handleMessage}
       className='absolute flex items-center justify-center h-full w-12 right-0 top-0 text-white hover:text-black '
     >
-      <SendIcon />
+      <SendIcon className='bg-black rounded-full hover:bg-white' />
+      <span className='sr-only'>Submit</span>
     </button>
   )
 }
