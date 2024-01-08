@@ -34,7 +34,7 @@ function HotButton ({ prompt }: HotButtonProps): JSX.Element {
       onClick={async () => {
         await handleClick()
       }}
-      className='inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 bg-white text-gray-900'
+      className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded-md shadow'
     >
       {prompt}
     </button>
