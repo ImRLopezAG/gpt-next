@@ -29,7 +29,7 @@ function Messages (): JSX.Element {
   }, [messages])
 
   return (
-    <div className='flex flex-col mb-4 gap-1 px-4 overflow-y-auto scrollbar-hide'>
+    <div className='flex flex-col mb-4 space-y-4 px-4 overflow-y-auto scrollbar-hide'>
       <Toast />
       {typeof window !== 'undefined' &&
       messages !== undefined &&
@@ -41,7 +41,7 @@ function Messages (): JSX.Element {
           )
         : (
             <div className='flex flex-col items-center justify-center h-full gap-3'>
-              <OpenAIIcon />
+              <OpenAIIcon className='size-20 ' />
               <h1 className='text-3xl font-semibold mb-12'>
                 How can I help you today?
               </h1>
