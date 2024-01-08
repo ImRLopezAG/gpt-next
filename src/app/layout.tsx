@@ -1,7 +1,8 @@
+import { Header } from '@components/server'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { cx } from 'react-twc'
 import './globals.css'
-import { Header } from '@components/server'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +20,7 @@ export default function RootLayout<T extends Props> ({
 }: T): JSX.Element {
   return (
     <html lang='en'>
-      <body className={inter.className + ' bg-zinc-900 text-white'}>
+      <body className={cx(' bg-zinc-900 text-white', inter.className)}>
         <main className='flex  flex-row h-screen w-full antialiased text-white bg-zinc-800 overflow-y-hidden'>
           <Header />
           {children}

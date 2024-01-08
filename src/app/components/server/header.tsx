@@ -1,9 +1,9 @@
-import { ChatHeader } from '@components/server'
 import { AddChat, Chats } from '@components/client/chat'
+import { ChatHeader } from '@components/server'
 
 function Header (): JSX.Element {
   return (
-    <aside className='flex flex-col py-6 pl-6 pr-2 w-64 flex-shrink-0'>
+    <aside className='hidden md:flex flex-col py-6 pl-6 pr-2 w-64 md:flex-shrink-0'>
       <ChatHeader />
       <div className='flex flex-col gap-3 mt-8'>
         <div className='flex flex-row items-center justify-between text-xs'>

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { useChatStore, type MessageType } from '@app/context'
 import { toast } from 'react-hot-toast'
 import { useParams } from 'next/navigation'
@@ -29,7 +29,6 @@ export function useMessage (): MessageReturn {
   const { getChatMessages, loading } = useChatStore()
   const messages = getChatMessages(id)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [messagesStorage, setMessages] = useState<MessageType[]>()
 
   const copyToClipboard = async (message: string): Promise<void> => {
     try {
@@ -52,14 +51,8 @@ export function useMessage (): MessageReturn {
       .trim()
   }
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && messages !== undefined) {
-      setMessages(messages)
-    }
-  }, [messages])
-
   return {
-    messages: messagesStorage,
+    messages,
     loading,
     messagesEndRef,
     markdownFormatToTextPlain,
