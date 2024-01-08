@@ -20,7 +20,7 @@ export async function generateResponse ({
 
 export async function getNameFromResponse ({ prompt }: GenerateResponse): Promise<string> {
   const response = await generateResponse({
-    prompt: `Generate a title for a this topic: it should as max 20 words. \n\n${prompt}`
+    prompt: `Generate a title for a this topic: it should as max 4 words. \n\n${prompt}`
   })
   return response
 }
