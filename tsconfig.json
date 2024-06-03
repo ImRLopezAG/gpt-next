@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,9 +20,12 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/app/components/*"],
-      "@config/*": ["./src/config/*"],
-      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/app/_components/*"],
+      "@hooks/*": ["./src/app/_hooks/*"],
+      "@ui/*": ["./src/app/_components/ui/*"],
+      "@chat/*": ["./src/app/_components/chat/*"],
+      "@context/*": ["./src/app/_context/*"],
+      "@actions/*": ["./src/actions/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

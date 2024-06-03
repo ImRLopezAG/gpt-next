@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+:root {
+  --dark-primary: #171717;
+  --fg-primary: #2f2f2f;
+  --dark-secondary: #212121;
+  --fg-secondary: #676767;
+}
+
+/* Add z index to the scrollbar */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fg-primary) var(--dark-primary);
 }
