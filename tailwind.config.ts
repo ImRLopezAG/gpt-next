@@ -17,6 +17,7 @@ const config: Config = {
         fg: {
           primary: '#2f2f2f',
           secondary: '#676767',
+          tertiary: '#ececec',
         },
       },
     },

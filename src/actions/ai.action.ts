@@ -4,7 +4,7 @@ import { env } from 'node:process'
 
 const AI = new GoogleGenerativeAI(env.GOOGLE_API_KEY ?? '')
 
-const model = AI.getGenerativeModel({ model: 'gemini-1.5-pro' })
+const model = AI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
 interface GenerateResponse {
   prompt: string

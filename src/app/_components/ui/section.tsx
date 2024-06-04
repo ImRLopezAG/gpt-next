@@ -1,10 +1,15 @@
 import { Messages } from '@chat/messages'
-import { AvatarIcon, ChatIcon, SideBarIcon } from '@components/icons'
+import {
+  AvatarIcon,
+  ChatIcon,
+  SideBarIcon,
+  SmallSideBarIcon
+} from '@components/icons'
 import { useChat } from '@hooks/use-chat'
 import { ChatForm } from '@ui/form'
 
 export const ChatSection: React.FC = () => {
-  const { isOpen, handleSideBar } = useChat()
+  const { isOpen, handleSideBar, isMobile } = useChat()
   return (
     <main className='relative h-full w-full flex-1 overflow-y-auto bg-dark-secondary'>
       <div
@@ -22,11 +27,16 @@ export const ChatSection: React.FC = () => {
                         className='h-10 rounded-lg p-2 focus-visible:outline-0 hover:hover:bg-zinc-700 focus-visible:bg-fg-secondary'
                         onClick={handleSideBar}
                       >
-                        <SideBarIcon />
+                        <span className='sr-only'>Open Sidebar</span>
+                        {!isMobile && <SideBarIcon />}
+                        {isMobile && <SmallSideBarIcon />}
                       </button>
-                      <button className='h-10 rounded-lg p-2 focus-visible:outline-0 hover:hover:bg-zinc-700 focus-visible:bg-fg-secondary'>
-                        <ChatIcon />
-                      </button>
+                      {!isMobile && (
+                        <button className='h-10 rounded-lg p-2 focus-visible:outline-0 hover:hover:bg-zinc-700 focus-visible:bg-fg-secondary'>
+                          <span className='sr-only'>Open Chat</span>
+                          <ChatIcon />
+                        </button>
+                      )}
                     </div>
                   )}
                   <div
@@ -35,7 +45,7 @@ export const ChatSection: React.FC = () => {
                     data-state='closed'
                     className='group flex cursor-pointer items-center gap-1 rounded-xl py-2 px-3 text-lg font-semibold hover:bg-zinc-700 radix-state-open:bg-zinc-700   overflow-hidden whitespace-nowrap'
                   >
-                    <span>My GPT</span>
+                    <span className='text-fg-tertiary'>My GPT</span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       width='24'

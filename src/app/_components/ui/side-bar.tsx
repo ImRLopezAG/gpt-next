@@ -1,4 +1,9 @@
-import { ChatIcon, LogoIcon, SideBarIcon } from '@components/icons'
+import {
+  ChatIcon,
+  LogoIcon,
+  SideBarIcon,
+  SmallSideBarIcon
+} from '@components/icons'
 import { useChat } from '@hooks/use-chat'
 import { cx } from 'react-twc'
 export const SideBar: React.FC = () => {
@@ -19,10 +24,12 @@ export const SideBar: React.FC = () => {
               <nav className='flex h-full w-full flex-col px-3 pb-0 mr'>
                 <div className='flex justify-between h-14 items-center'>
                   <button
+                    className='h-10 rounded-lg p-2 focus-visible:outline-0 hover:hover:bg-zinc-700 focus-visible:bg-fg-secondary'
                     onClick={handleSideBar}
-                    className='h-10 rounded-lg px-2 focus-visible:outline-0 hover:bg-dark-secondary focus-visible:bg-fg-secondary'
                   >
-                    <SideBarIcon />
+                    <span className='sr-only'>Open Sidebar</span>
+                    {!isMobile && <SideBarIcon />}
+                    {isMobile && <SmallSideBarIcon />}
                   </button>
                   <button className='h-10 rounded-lg px-2 focus-visible:outline-0 hover:bg-dark-secondary focus-visible:bg-fg-secondary'>
                     <ChatIcon />
@@ -97,33 +104,7 @@ export const SideBar: React.FC = () => {
                   </div>
                 </div>
                 <div className='flex flex-col gap-2 pb-2  text-sm mt-5 overflow-y-auto'>
-                  {Array.from({ length: 100 }).map((_, i) => (
-                    <div key={i} className='flex flex-col gap-2'>
-                      <a
-                        href='/'
-                        className='flex h-10 items-center gap-2 rounded-lg px-2 font-medium hover:bg-dark-secondary'
-                      >
-                        <div className='flex items-center justify-center h-6 w-6'>
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='24'
-                            height='24'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            className='icon-md'
-                          >
-                            <path
-                              fill='currentColor'
-                              fillRule='evenodd'
-                              d='M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10 10 10 0 0 1-10-10A10 10 0 0 1 12 2zm0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8zm1 3v8h-2V7h2zm0 9v2h-2v-2h2z'
-                              clipRule='evenodd'
-                            ></path>
-                          </svg>
-                        </div>
-                        <span className='text-sm'>Explore GPTs</span>
-                      </a>
-                    </div>
-                  ))}
+                  {/* Links to other chats */}
                 </div>
               </nav>
             </div>
